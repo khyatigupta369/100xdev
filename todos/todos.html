@@ -4,25 +4,87 @@
     </title>
 </head>
 <script>
+
+    function getData() {
+        const todos = {}
+        // fetch get
+        fetch('http://localhost:3004/todos',
+            {
+                method: 'GET',
+                headers: {
+                    "Content-Type": "application/json",
+                }
+            },
+        ).then((response) => {
+            response.json().then((data) => {
+                // document.getElementById('mainArea').innerHTML = JSON.stringify(data);
+                // data is an array 
+                parentElement = document.getElementById('mainArea');
+                parentElement.innerHTML = ''
+                console.log(data);
+                for(var i = 0; i < data.length; i++){
+                    var childElement = document.createElement('div')
+
+                    var grandChildElement1 = document.createElement('span') 
+                    grandChildElement1.innerHTML = data[i].title
+                    var grandChildElement2 = document.createElement('span') 
+                    grandChildElement2.innerHTML = data[i].description
+                    var grandChildElement3 = document.createElement('button') 
+                    grandChildElement3.innerHTML = 'Delete'
+
+                    childElement.appendChild(grandChildElement1)
+                    childElement.appendChild(grandChildElement2)
+                    childElement.appendChild(grandChildElement3)
+
+                    parentElement.appendChild(childElement)
+                }
+            })
+        });
+
+
+
+        return 200
+    }
+
+    getData();
+    // fetch wants me to stringify my body 
+
+
     function onPress() {
+        const title = document.getElementById('title').value
+        const description = document.getElementById('description').value
         fetch(
-            'http://localhost:3002/todos', 
-            {method:'GET'}).
-            then((response) =>
-            response.json().
-            then((jsonBody) => 
-                console.log(jsonBody))
-        );
+            'http://localhost:3004/todos',
+            {
+                method: 'POST',
+                body: JSON.stringify({
+                    title: title,
+                    description: description
+                }),
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            }).
+            then((response) => {
+                response.json().then(data => {
+                    title.innerHTML = ''
+                    description.innerHTML = ''
+                    getData();
+                })
+            });
+
     }
 </script>
+
 <body>
     <label for="title"></label>
-    <input type="text" name="title" placeholder="Enter Title">
+    <input type="text" id="title" placeholder="Enter Title">
     <br><br>
     <label for="description"></label>
-    <input type="text" name="description" placeholder="Enter description">
+    <input type="text" id="description" placeholder="Enter description">
     <br><br>
     <button onclick="onPress()">Add Task</button>
+    <div id="mainArea"></div>
 </body>
 <script>
 

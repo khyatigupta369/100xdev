@@ -1,6 +1,7 @@
 const express = require('express')
 const bodyParser = require('body-parser')
 const app = express();
+const path = require('path')
 
 // middleware
 app.use(bodyParser.json())
@@ -16,7 +17,7 @@ function removeAtIndex(array, index){
 }
 
 app.get('/', (req, res) => {
-    res.send('Hello World');
+    res.sendFile(path.join(__dirname,'/todos.html'));
 });
 
 app.get('/todos', (req, res) =>{

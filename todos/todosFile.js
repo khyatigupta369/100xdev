@@ -2,9 +2,13 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const app = express();
 const fs = require('fs')
+const path = require('path')
+// how to remove cors error - cross origin response error
+const cors = require('cors');
 
 // middleware
 app.use(bodyParser.json())
+app.use(cors());
 
 function removeAtIndex(array, index){
     var newArray = [];
@@ -14,9 +18,13 @@ function removeAtIndex(array, index){
     return newArray;
 }
 
-app.get('/', (req, res) => {
-    res.send('Hello World');
-});
+app.get('/', (req, res)=>{
+    res.send("Hello world");
+})
+
+// app.get('/', (req, res) => {
+//     res.sendFile(path.join(__dirname,'/todos.html'));
+// });
 
 app.get('/todos', (req, res) =>{
     // read from file
